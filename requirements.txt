@@ -1,0 +1,9 @@
+numpy
+torch
+pydub
+python-dotenv
+flask
+flask-socketio
+google-generativeai
+openai-whisper
+gTTS
