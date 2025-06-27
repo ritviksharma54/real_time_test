@@ -1,9 +1,8 @@
-numpy
-torch
+Flask
+Flask-SocketIO
 pydub
-python-dotenv
-flask
-flask-socketio
 google-generativeai
 openai-whisper
 gTTS
+numpy<2.1 
+python-dotenv
