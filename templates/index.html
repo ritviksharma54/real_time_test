@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Real-Time Voice AI with Gemini</title>
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Socket.IO -->
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
   <style>
     body {
@@ -16,9 +15,9 @@
     }
     .visualizer {
       width: 100%;
-      height: 100px; /* Reduced height slightly */
-      background-color: #e9ecef; /* Slightly darker for better contrast */
-      border: 1px solid #ced4da; /* Softer border */
+      height: 100px; 
+      background-color: #e9ecef; 
+      border: 1px solid #ced4da; 
       border-radius: 8px;
       margin-bottom: 20px;
       box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
@@ -30,7 +29,7 @@
       border-radius: 50%;
       display: inline-block;
       margin-right: 8px;
-      vertical-align: middle; /* Align with text */
+      vertical-align: middle; 
     }
 
     .status-connected { background-color: #28a745; }
@@ -42,10 +41,10 @@
     .status-vad-active { background-color: #007bff; }
 
     .message-bubble {
-      max-width: 75%; /* Slightly reduced max-width */
-      margin-bottom: 12px; /* Slightly reduced margin */
-      padding: 10px 15px; /* Adjusted padding */
-      border-radius: 20px; /* More rounded */
+      max-width: 75%; 
+      margin-bottom: 12px; 
+      padding: 10px 15px; 
+      border-radius: 20px; 
       word-wrap: break-word;
       position: relative;
       box-shadow: 0 2px 5px rgba(0,0,0,0.08);
@@ -56,25 +55,25 @@
       background-color: #007bff;
       color: white;
       margin-left: auto;
-      border-bottom-right-radius: 5px; /* Bubble tail illusion */
+      border-bottom-right-radius: 5px; 
     }
 
     .message-assistant {
-      background-color: #f8f9fa; /* Lighter assistant bubble */
-      color: #343a40; /* Darker text for better contrast */
+      background-color: #f8f9fa; 
+      color: #343a40; 
       margin-right: auto;
       border: 1px solid #e9ecef;
-      border-bottom-left-radius: 5px; /* Bubble tail illusion */
+      border-bottom-left-radius: 5px; 
     }
 
     .chat-container {
-      height: 350px; /* Adjusted height */
+      height: 350px; 
       overflow-y: auto;
       border: 1px solid #dee2e6;
       border-radius: 8px;
-      padding: 20px; /* Increased padding */
-      background-color: #ffffff; /* White background for chat */
-      margin-bottom: 20px; /* Added margin bottom */
+      padding: 20px; 
+      background-color: #ffffff; 
+      margin-bottom: 20px; 
     }
 
     .controls {
@@ -83,12 +82,12 @@
     }
 
     .btn-voice {
-      width: 80px; /* Slightly smaller button */
+      width: 80px;
       height: 80px;
       border-radius: 50%;
       border: none;
-      font-size: 28px; /* Adjusted font size */
-      transition: all 0.2s ease-in-out; /* Smoother transition */
+      font-size: 28px;
+      transition: all 0.2s ease-in-out;
       position: relative;
       overflow: hidden;
       background-color: #6c757d;
@@ -107,7 +106,7 @@
     .btn-voice.vad-listening-mode { background-color: #007bff; }
     .btn-voice.user-speaking { background-color: #ffc107; color: #212529; animation: pulse-yellow 1.2s infinite; }
     .btn-voice.ai-processing { background-color: #0dcaf0; color: #212529; animation: spin 1.5s linear infinite; }
-    .btn-voice.ai-speaking { background-color: #e83e8c; /* More vibrant pink/purple for speaking */ }
+    .btn-voice.ai-speaking { background-color: #e83e8c; }
 
 
     @keyframes pulse-yellow {
@@ -122,9 +121,9 @@
     }
 
     .connection-status {
-      padding: 6px 12px; /* Adjusted padding */
-      border-radius: 15px; /* More rounded */
-      font-size: 0.85rem; /* Smaller font */
+      padding: 6px 12px; 
+      border-radius: 15px; 
+      font-size: 0.85rem; 
       font-weight: 500;
     }
     .connection-connected { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc;}
@@ -184,7 +183,7 @@
   <div class="container">
     <header class="text-center py-4 mb-4 border-bottom">
         <h1 class="h2">🤖 Real-Time Voice AI with Gemini</h1>
-        <p class="text-muted">Powered by Gemini 1.5 Flash, gTTS & Whisper</p>
+        <p class="text-muted">Powered by Gemini, gTTS & Whisper</p>
     </header>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -213,6 +212,23 @@
 
     <div class="row">
       <div class="col-lg-6">
+        <!-- Input Language Selector -->
+        <div class="settings-card mb-3">
+            <div class="card-header">
+                <h6 class="mb-0">🗣️ Input Language</h6>
+            </div>
+            <div class="card-body">
+                <label for="inputLanguageSelect" class="form-label small">I will speak in:</label>
+                <select id="inputLanguageSelect" class="form-select form-select-sm">
+                    <option value="en" selected>English (en)</option>
+                    <option value="hi">Hindi (hi)</option>
+                </select>
+                <small class="form-text text-muted mt-2 d-block">
+                    Select your primary speaking language for best results.
+                </small>
+            </div>
+        </div>
+
         <div class="audio-controls-card">
           <div class="card-header">🎙️ Voice Controls</div>
           <div class="card-body">
@@ -252,11 +268,10 @@
         <div class="chat-card">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0 h6">💬 Conversation</h5>
-            <!-- <small class="text-muted">with Gemini</small> -->
           </div>
           <div class="chat-container" id="chatContainer">
             <div class="message-bubble message-assistant">
-                Hello! I'm your AI assistant. Enable hands-free mode by clicking the microphone. I'll listen and respond!
+                Hello! I'm your AI assistant. Select your speaking language, then enable hands-free mode by clicking the microphone. I'll listen and respond!
             </div>
           </div>
         </div>
@@ -310,16 +325,18 @@
         this.vadEnabled = false;
         this.userIsSpeakingVAD = false;
         this.isAISpeechCoolDown = false;
-        this.currentServerAudio = null;
+        this.currentServerAudio = null; // Stores the current <audio> element from server
+        this.currentUtterance = null;  // Stores the current SpeechSynthesisUtterance
 
         this.synthesis = window.speechSynthesis;
-        this.currentUtterance = null;
+
 
         // VAD parameters
         this.VAD_ENERGY_THRESHOLD = 0.01;
         this.VAD_SILENCE_DURATION_MS = 1200;
         this.VAD_MIN_SPEECH_DURATION_MS = 700;
         this.AI_SPEECH_COOLDOWN_MS = 700;
+        this.cooldownTimeoutId = null; // For managing cooldown timeout
 
         // VAD state variables
         this.silenceTimeoutId = null;
@@ -333,8 +350,8 @@
         this.log("VoiceAI Initialized");
       }
 
-      log(message, style = "color: blue;") { 
-        console.log(`%c[VoiceAI] ${message}`, style); 
+      log(message, style = "color: blue;") {
+        console.log(`%c[VoiceAI] ${message}`, style);
       }
 
       error(message, errorObj = null) {
@@ -359,6 +376,7 @@
         this.speedValue = document.getElementById('speedValue');
         this.pitchValue = document.getElementById('pitchValue');
         this.audioVisualizer = document.getElementById('audioVisualizer');
+        this.inputLanguageSelect = document.getElementById('inputLanguageSelect');
         this.log("Elements Initialized");
       }
 
@@ -427,7 +445,7 @@
           this.synthesis.onvoiceschanged = populateVoices;
         } else {
             this.log("onvoiceschanged not supported by this browser for TTS. Attempting to populate voices directly.");
-            setTimeout(populateVoices, 1000);
+            setTimeout(populateVoices, 1000); // Attempt to populate after a delay
         }
         this.log("Speech Synthesis Initialized");
       }
@@ -437,7 +455,7 @@
         if (this.localStream && this.localStream.active) {
           this.log("Microphone already active. Ensuring audio pipeline is running.");
           if (!this.audioContext || this.audioContext.state !== 'running') {
-            this.initAudioPipeline(); // No need to return promise here
+            this.initAudioPipeline();
           }
           return;
         }
@@ -447,7 +465,7 @@
               echoCancellation: true,
               noiseSuppression: true,
               autoGainControl: true,
-              sampleRate: 44100
+              sampleRate: 44100 // Common sample rate
             }
           });
           this.log('🎤 Microphone access granted.');
@@ -499,7 +517,7 @@
             return true; // Indicate success
         } catch (e) {
             this.error("Failed to initialize audio pipeline", e);
-            this.audioContext = null;
+            this.audioContext = null; // Reset on failure
             return false; // Indicate failure
         }
       }
@@ -511,7 +529,6 @@
         }
         if (!this.analyser || !this.audioContext || this.audioContext.state !== 'running') {
             this.log("Cannot start visualization: Analyser or AudioContext not ready/running.");
-            // Attempt to re-initialize. If it fails, VAD won't start visually.
             if (!this.initAudioPipeline()) { // if initAudioPipeline returns false (failure)
                 this.error("Failed to start visualization: Audio pipeline init failed.");
                 this.stopVAD(true); // Turn off VAD if we can't visualize/process
@@ -523,7 +540,7 @@
         const canvas = this.audioVisualizer;
         const ctx = canvas.getContext('2d');
         if (!ctx) { this.error("Failed to get canvas context for visualizer."); return; }
-        
+
         canvas.width = canvas.offsetWidth > 0 ? canvas.offsetWidth : 300; // Default if hidden
         canvas.height = canvas.offsetHeight > 0 ? canvas.offsetHeight : 100; // Default if hidden
 
@@ -536,7 +553,7 @@
                 cancelAnimationFrame(this.animationId);
                 this.animationId = null;
                 this.log("VAD disabled, stopping visualization loop.");
-                ctx.fillStyle = '#e9ecef';
+                ctx.fillStyle = '#e9ecef'; // Clear canvas
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
             return;
@@ -545,24 +562,24 @@
              if (this.animationId) cancelAnimationFrame(this.animationId);
              this.animationId = null;
              this.error("Visualizer stopping: Audio pipeline issue.");
-             this.stopVAD(true);
+             this.stopVAD(true); // Stop VAD if audio pipeline fails
              return;
           }
 
           this.animationId = requestAnimationFrame(drawAndProcess); // Request next frame first
-          
+
           this.analyser.getByteTimeDomainData(dataArray);
 
           ctx.fillStyle = '#e9ecef';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.lineWidth = 2;
 
-          let isAISpeaking = (this.currentServerAudio && !this.currentServerAudio.paused) || this.synthesis.speaking;
+          let isAISpeaking = (this.currentServerAudio && !this.currentServerAudio.paused) || (this.synthesis && this.synthesis.speaking);
 
-          if (this.userIsSpeakingVAD) ctx.strokeStyle = '#ffc107';
-          else if (isAISpeaking) ctx.strokeStyle = '#e83e8c';
-          else if (this.vadEnabled) ctx.strokeStyle = '#007bff';
-          else ctx.strokeStyle = '#6c757d';
+          if (this.userIsSpeakingVAD) ctx.strokeStyle = '#ffc107'; // Yellow for user speaking
+          else if (isAISpeaking) ctx.strokeStyle = '#e83e8c';      // Pink/Purple for AI speaking
+          else if (this.vadEnabled) ctx.strokeStyle = '#007bff';   // Blue for VAD active listening
+          else ctx.strokeStyle = '#6c757d';                       // Grey for idle/VAD off
 
           ctx.beginPath();
           const sliceWidth = canvas.width * 1.0 / bufferLength;
@@ -607,16 +624,14 @@
             this.log("Visualization loop stopped explicitly (VAD was already off).");
         }
         // Disconnect nodes to allow garbage collection and stop processing
-        if (this.sourceNode) { 
+        if (this.sourceNode) {
             try { this.sourceNode.disconnect(); } catch(e) { /* ignore */ }
-            this.sourceNode = null; 
+            this.sourceNode = null;
         }
-        if (this.analyser) { 
+        if (this.analyser) {
             try { this.analyser.disconnect(); } catch(e) { /* ignore */ }
-            this.analyser = null; 
+            this.analyser = null;
         }
-        // Do not close audioContext here, it might be reused.
-        // It's better to let the browser manage its lifecycle or close it on page unload.
       }
 
       async toggleVAD() {
@@ -656,7 +671,7 @@
                 return;
             }
         }
-        
+
         this.log('🟢 Activating VAD (Hands-Free Mode)...');
         this.vadEnabled = true; // Set this before starting loop
         this.userIsSpeakingVAD = false;
@@ -689,10 +704,10 @@
           this.log("VAD stopped during active capture. Discarding audio.", "color: orange;");
           this.isCapturingAudio = false; // Signal to onstop to discard
           if (this.mediaRecorder && this.mediaRecorder.state === "recording") {
-            this.mediaRecorder.stop();
+            this.mediaRecorder.stop(); // onstop will handle discarding if isCapturingAudio is false
           }
         }
-        
+
         if (updateToIdle) {
             this.updateStatus('idle', 'Ready', 'Click the microphone to start listening');
         }
@@ -703,25 +718,25 @@
       }
 
       calculateAverageEnergy(dataArray) {
-        let sum = 0; 
-        for (let i = 0; i < dataArray.length; i++) { 
-            const s = (dataArray[i] / 128.0) - 1.0; sum += s * s; 
-        } 
+        let sum = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+            const s = (dataArray[i] / 128.0) - 1.0; sum += s * s;
+        }
         return Math.sqrt(sum / dataArray.length);
       }
 
       vad_detectSpeechStart(dataArray) {
           if (this.calculateAverageEnergy(dataArray) > this.VAD_ENERGY_THRESHOLD) {
-              this.userIsSpeakingVAD = true; 
+              this.userIsSpeakingVAD = true;
               this.speechStartTime = Date.now();
               this.updateStatus('listening', 'User Speaking...', 'Capturing your voice');
-              this.voiceBtn.classList.add('user-speaking'); 
+              this.voiceBtn.classList.add('user-speaking');
               this.voiceBtn.classList.remove('vad-listening-mode', 'status-idle');
-              this.transcriptionDisplay.innerHTML = '<strong>Transcription:</strong> Listening<span class="loading-dots"></span>'; 
+              this.transcriptionDisplay.innerHTML = '<strong>Transcription:</strong> Listening<span class="loading-dots"></span>';
               this.startMediaRecorderForCapture();
               if (this.silenceTimeoutId) clearTimeout(this.silenceTimeoutId);
-              this.silenceTimeoutId = setTimeout(() => { 
-                  if (this.userIsSpeakingVAD && this.vadEnabled && this.isCapturingAudio) this.vad_handleEndOfSpeech(); 
+              this.silenceTimeoutId = setTimeout(() => {
+                  if (this.userIsSpeakingVAD && this.vadEnabled && this.isCapturingAudio) this.vad_handleEndOfSpeech();
               }, this.VAD_SILENCE_DURATION_MS);
           }
       }
@@ -729,28 +744,28 @@
       vad_detectSpeechContinuation(dataArray) {
           if (this.calculateAverageEnergy(dataArray) > this.VAD_ENERGY_THRESHOLD) {
               if (this.silenceTimeoutId) clearTimeout(this.silenceTimeoutId);
-              this.silenceTimeoutId = setTimeout(() => { 
-                  if (this.userIsSpeakingVAD && this.vadEnabled && this.isCapturingAudio) this.vad_handleEndOfSpeech(); 
+              this.silenceTimeoutId = setTimeout(() => {
+                  if (this.userIsSpeakingVAD && this.vadEnabled && this.isCapturingAudio) this.vad_handleEndOfSpeech();
               }, this.VAD_SILENCE_DURATION_MS);
           }
       }
 
       vad_handleEndOfSpeech() {
-        if (!this.vadEnabled || (!this.userIsSpeakingVAD && !this.isCapturingAudio)) { 
-            this.log("vad_handleEndOfSpeech: exiting, VAD disabled or not in relevant state."); 
-            this.resetToListeningState(); // Ensure UI consistency
-            return; 
+        if (!this.vadEnabled || (!this.userIsSpeakingVAD && !this.isCapturingAudio)) {
+            this.log("vad_handleEndOfSpeech: exiting, VAD disabled or not in relevant state.");
+            this.resetToListeningState();
+            return;
         }
         if (this.silenceTimeoutId) { clearTimeout(this.silenceTimeoutId); this.silenceTimeoutId = null; }
-        
+
         const speechDuration = this.speechStartTime ? (Date.now() - this.speechStartTime) : 0;
         this.userIsSpeakingVAD = false; // User is no longer actively speaking according to VAD
         this.log(`🎤 VAD determined End of Speech. Duration: ${speechDuration}ms`);
-        
-        if (!this.isCapturingAudio) { 
-            this.log("Not in capturing audio state when VAD ended speech, likely already handled (e.g. stopped by other means)."); 
-            this.resetToListeningState(); 
-            return; 
+
+        if (!this.isCapturingAudio) {
+            this.log("Not in capturing audio state when VAD ended speech, likely already handled (e.g. stopped by other means).");
+            this.resetToListeningState();
+            return;
         }
 
         if (speechDuration < this.VAD_MIN_SPEECH_DURATION_MS) {
@@ -758,63 +773,63 @@
             this.isCapturingAudio = false; // Signal to onstop to discard
             if (this.mediaRecorder && this.mediaRecorder.state === "recording") this.mediaRecorder.stop();
             this.transcriptionDisplay.innerHTML = 'Speech too short... Try speaking for a bit longer.';
-            this.resetToListeningState(); 
+            this.resetToListeningState();
             return;
         }
 
         // If speech is long enough, stop the recorder to process.
-        if (this.mediaRecorder && this.mediaRecorder.state === "recording") { 
-            this.log("Valid speech duration, stopping MediaRecorder for processing."); 
+        if (this.mediaRecorder && this.mediaRecorder.state === "recording") {
+            this.log("Valid speech duration, stopping MediaRecorder for processing.");
             this.mediaRecorder.stop(); // onstop will call processCapturedAudio if isCapturingAudio is still true
-        } else if (this.isCapturingAudio && this.audioChunks.length > 0) { 
-            this.log("MediaRecorder was not recording but chunks exist and capturing was intended. Processing.", "color: orange;"); 
-            this.processCapturedAudio(); 
-        } else { 
-            this.log("No active recorder or chunks to process after VAD end of speech.", "color: orange;"); 
-            this.resetToListeningState(); 
+        } else if (this.isCapturingAudio && this.audioChunks.length > 0) {
+            this.log("MediaRecorder was not recording but chunks exist and capturing was intended. Processing.", "color: orange;");
+            this.processCapturedAudio(); // Process directly if recorder wasn't active but we have chunks
+        } else {
+            this.log("No active recorder or chunks to process after VAD end of speech.", "color: orange;");
+            this.resetToListeningState();
         }
       }
 
       startMediaRecorderForCapture() {
-        if (!this.localStream || !this.localStream.active) { 
-            this.error("No local stream for MediaRecorder. Cannot start capture."); 
-            this.resetToListeningState(); 
-            return; 
+        if (!this.localStream || !this.localStream.active) {
+            this.error("No local stream for MediaRecorder. Cannot start capture.");
+            this.resetToListeningState();
+            return;
         }
-        if (this.mediaRecorder && this.mediaRecorder.state === "recording") { 
-            this.log("MediaRecorder already recording."); 
-            return; 
+        if (this.mediaRecorder && this.mediaRecorder.state === "recording") {
+            this.log("MediaRecorder already recording.");
+            return;
         }
         this.isCapturingAudio = true; // Explicitly set intent to capture
         this.audioChunks = [];
         try {
             this.mediaRecorder = new MediaRecorder(this.localStream, { mimeType: 'audio/webm;codecs=opus' });
-            this.mediaRecorder.ondataavailable = (e) => { 
-                if (e.data.size > 0) this.audioChunks.push(e.data); 
+            this.mediaRecorder.ondataavailable = (e) => {
+                if (e.data.size > 0) this.audioChunks.push(e.data);
             };
             this.mediaRecorder.onstop = () => {
                 this.log(`MediaRecorder onstop. isCapturingAudio: ${this.isCapturingAudio}, Chunks: ${this.audioChunks.length}`);
-                if (this.audioChunks.length > 0 && this.isCapturingAudio) { 
-                    this.processCapturedAudio(); 
-                } else { 
-                    this.audioChunks = []; 
-                    this.log("MediaRecorder stopped. Discarding chunks or no capture intended."); 
-                    if (this.vadEnabled) this.resetToListeningState(); // Reset to listening if VAD still on
+                if (this.audioChunks.length > 0 && this.isCapturingAudio) {
+                    this.processCapturedAudio();
+                } else {
+                    this.audioChunks = [];
+                    this.log("MediaRecorder stopped. Discarding chunks or no capture intended.");
+                    if (this.vadEnabled && !this.isProcessingAI) this.resetToListeningState(); // Reset to listening if VAD still on and not processing
                 }
                 // Ensure isCapturingAudio is false after onstop, regardless of processing
                 this.isCapturingAudio = false;
             };
-            this.mediaRecorder.onerror = (e) => { 
-                this.error(`MediaRecorder error: ${e.error ? e.error.name : 'Unknown error'}`, e.error); 
-                this.isCapturingAudio = false; 
-                this.resetToListeningState(); 
+            this.mediaRecorder.onerror = (e) => {
+                this.error(`MediaRecorder error: ${e.error ? e.error.name : 'Unknown error'}`, e.error);
+                this.isCapturingAudio = false;
+                this.resetToListeningState();
             };
             this.mediaRecorder.start(1000); // Optional: timeslice to get data more frequently if needed
             this.log("MediaRecorder started.");
-        } catch (err) { 
-            this.error(`MediaRecorder start error: ${err.message}`, err); 
-            this.isCapturingAudio = false; 
-            this.resetToListeningState(); 
+        } catch (err) {
+            this.error(`MediaRecorder start error: ${err.message}`, err);
+            this.isCapturingAudio = false;
+            this.resetToListeningState();
         }
       }
 
@@ -832,43 +847,53 @@
             return;
         }
 
-        this.isProcessingAI = true; 
-        // isCapturingAudio should be false by now (set in onstop or vad_handleEndOfSpeech)
+        this.isProcessingAI = true;
         this.updateStatus('processing', 'Processing...', 'AI is analyzing your speech');
-        this.voiceBtn.classList.add('ai-processing'); 
+        this.voiceBtn.classList.add('ai-processing');
         this.voiceBtn.classList.remove('user-speaking', 'vad-listening-mode', 'status-idle');
-        
-        const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm;codecs=opus' }); 
+
+        const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm;codecs=opus' });
         this.audioChunks = []; // Clear chunks after creating blob
+
+        const selectedLanguage = this.inputLanguageSelect.value;
+        this.log(`Selected input language for STT: ${selectedLanguage}`);
+
         try {
             const reader = new FileReader();
             reader.onloadend = () => {
                 this.log(`Sending audio to server. Size: ${audioBlob.size} bytes`);
-                this.socket.emit('audio_data', { audio: reader.result, timestamp: Date.now() });
+                this.socket.emit('audio_data', {
+                    audio: reader.result,
+                    timestamp: Date.now(),
+                    target_lang: selectedLanguage
+                });
             };
             reader.readAsDataURL(audioBlob);
         } catch (e) {
             this.error("Error processing captured audio for sending", e);
-            this.isProcessingAI = false; 
+            this.isProcessingAI = false;
             this.resetToListeningState();
         }
       }
 
       handleAudioResponse(data) {
-        this.isProcessingAI = false; // AI processing is done
+        this.isProcessingAI = false;
         this.voiceBtn.classList.remove('ai-processing');
 
         if (data.success) {
-          let transcriptionHTML = ``; // Start fresh
+          let transcriptionHTML = ``;
           if (data.transcription) {
-            transcriptionHTML += `<span class="detected-lang">(${data.detected_language || 'N/A'})</span> ${data.transcription}`;
+            transcriptionHTML += `<span class="detected-lang">(${data.detected_language || data.target_lang || 'N/A'})</span> ${data.transcription}`;
             this.addMessage(data.transcription, 'user');
           } else {
             transcriptionHTML = 'Speech processed (no transcription text).';
+            if (data.info) {
+                transcriptionHTML = data.info;
+            }
           }
           this.transcriptionDisplay.innerHTML = transcriptionHTML;
 
-          const aiResponseText = data.response_text || data.response; // Use response_text if available
+          const aiResponseText = data.response_text || data.response;
           if (aiResponseText) {
             this.addMessage(aiResponseText, 'assistant');
             if (data.response_audio_base64) {
@@ -879,76 +904,189 @@
               if (data.tts_error) this.log(`Server TTS Note: ${data.tts_error}`, "color: orange;");
               this.speakTextBrowserFallback(aiResponseText, data.response_language);
             }
-          } else { // No text response from AI, but STT might have been successful
+          } else {
             this.log("Successful processing but no AI text response.");
             this.resetToListeningState();
           }
-        } else { // data.success is false
+        } else {
           this.error(`AI Processing failed: ${data.error || 'Unknown error'}`);
           this.transcriptionDisplay.innerHTML = `<span style="color:red;">Error: ${data.error || 'Processing failed'}</span>`;
+          this.addMessage(`Error: ${data.error || 'Processing failed'}`, 'assistant');
           this.updateStatus('error', 'AI Error', data.error || 'Processing failed');
-          // Don't immediately reset to listening, let user see error, then cooldown/timeout will reset
-          this.startAISpeechCooldown(); // Use cooldown to reset after error display
+          this.startAISpeechCooldown();
+        }
+      }
+
+      // --- START OF FOCUSED CHANGES FOR STOP SPEAKING ---
+      stopSpeaking() {
+        let wasSpeakingServer = false;
+        let wasSpeakingBrowser = false;
+        this.log("Stop speaking button clicked.");
+
+        if (this.currentServerAudio && !this.currentServerAudio.paused) {
+          this.log("Attempting to stop server audio playback.");
+          try {
+            this.currentServerAudio.pause();
+            this.currentServerAudio.currentTime = 0; // Optional: Reset playback position
+            // Detach event listeners to prevent them from firing after manual stop
+            this.currentServerAudio.onplay = null;
+            this.currentServerAudio.onended = null;
+            this.currentServerAudio.onerror = null;
+            this.currentServerAudio.src = ""; // Release resource
+            this.log("Server audio paused and resources released.");
+          } catch (e) {
+            this.error("Error during server audio stop:", e);
+          }
+          this.currentServerAudio = null; // Crucial: clear the reference
+          wasSpeakingServer = true;
+        } else {
+            this.log("No server audio was playing or currentServerAudio is null.");
+        }
+
+        if (this.synthesis && this.synthesis.speaking) {
+          this.log("Attempting to stop browser AI speech.");
+          try {
+            if (this.currentUtterance) {
+                this.currentUtterance.onstart = null;
+                this.currentUtterance.onend = null;
+                this.currentUtterance.onerror = null;
+                this.log("Browser utterance event listeners detached (or attempted).");
+            }
+            this.synthesis.cancel();
+            this.log("Browser TTS cancelled.");
+          } catch (e) {
+            this.error("Error during browser TTS cancel:", e);
+          }
+          this.currentUtterance = null; // Crucial: clear the reference
+          wasSpeakingBrowser = true;
+        } else {
+            this.log("No browser TTS was speaking or synthesis is not active.");
+        }
+
+        this.voiceBtn.classList.remove('ai-speaking');
+        this.log("UI 'ai-speaking' class removed.");
+
+        if ((wasSpeakingServer || wasSpeakingBrowser)) {
+            if (!this.isAISpeechCoolDown) {
+                this.log("Manually triggered AI speech cooldown after stop action.");
+                this.startAISpeechCooldown();
+            } else {
+                this.log("Cooldown already active, just ensuring UI is reset.");
+                if (!this.vadEnabled) {
+                    this.updateStatus('idle', 'Ready', 'Click the microphone to start listening');
+                    this.voiceBtn.classList.remove('vad-listening-mode');
+                    this.voiceBtn.classList.add('status-idle');
+                }
+            }
+        } else {
+            this.log("Nothing was speaking. Ensuring UI consistency.");
+            this.resetToListeningState();
         }
       }
 
       playServerAudio(audioBase64) {
-        if (this.currentServerAudio && !this.currentServerAudio.paused) { 
-            this.log("Stopping previous server audio.");
-            this.currentServerAudio.pause(); 
-            this.currentServerAudio.src = ""; // Release resource
+        if (this.currentServerAudio && !this.currentServerAudio.paused) {
+            this.log("Stopping previous server audio before playing new one.");
+            this.currentServerAudio.pause();
+            this.currentServerAudio.onplay = null;
+            this.currentServerAudio.onended = null;
+            this.currentServerAudio.onerror = null;
+            this.currentServerAudio.src = "";
+            this.currentServerAudio = null;
         }
-        if (this.synthesis.speaking) {
-            this.log("Cancelling browser TTS.");
+        if (this.synthesis && this.synthesis.speaking) {
+            this.log("Cancelling browser TTS before playing server audio.");
+            if (this.currentUtterance) {
+                this.currentUtterance.onstart = null;
+                this.currentUtterance.onend = null;
+                this.currentUtterance.onerror = null;
+            }
             this.synthesis.cancel();
+            this.currentUtterance = null;
         }
 
-        this.currentServerAudio = new Audio(audioBase64);
-        // Cooldown starts on end/error/manual stop, not on play start
-        // this.isAISpeechCoolDown = false; 
+        const audio = new Audio(audioBase64);
+        this.currentServerAudio = audio;
 
-        this.currentServerAudio.onplay = () => {
+        this.log(`Setting up new server audio playback. Src: ${audioBase64.substring(0,50)}...`);
+
+        audio.onplay = () => {
+          if (audio !== this.currentServerAudio) {
+            this.log("Server audio onplay: Stale event, currentServerAudio changed. Ignoring.");
+            return;
+          }
           this.log("👄 AI Server Audio Started...");
           this.updateStatus('speaking', 'AI Speaking...', 'AI is responding');
           this.voiceBtn.classList.add('ai-speaking');
           this.voiceBtn.classList.remove('vad-listening-mode', 'user-speaking', 'ai-processing', 'status-idle');
         };
-        this.currentServerAudio.onended = () => {
-          this.log("👄 AI Server Audio Finished.");
-          this.currentServerAudio = null; // Clear current audio object
-          // UI class removal and cooldown start handled by startAISpeechCooldown or resetToListeningState
-          this.startAISpeechCooldown();
+
+        audio.onended = () => {
+          if (audio !== this.currentServerAudio && this.currentServerAudio !== null) {
+            this.log("Server audio onended: Stale event or already handled by stopSpeaking. Ignoring.");
+            return;
+          }
+          this.log("👄 AI Server Audio Finished (onended).");
+          if (this.currentServerAudio === audio) {
+              this.currentServerAudio = null;
+          }
+          if (!this.isAISpeechCoolDown) this.startAISpeechCooldown(); else this.log("Cooldown already active on server audio end.");
         };
-        this.currentServerAudio.onerror = (e) => {
-          this.error("Error playing server audio", e);
-          this.currentServerAudio = null;
-          this.startAISpeechCooldown();
+
+        audio.onerror = (e) => {
+          if (audio !== this.currentServerAudio && this.currentServerAudio !== null) {
+            this.log("Server audio onerror: Stale event or already handled by stopSpeaking. Ignoring.");
+            return;
+          }
+          this.error("Error playing server audio (onerror)", e);
+          if (this.currentServerAudio === audio) {
+              this.currentServerAudio = null;
+          }
+          if (!this.isAISpeechCoolDown) this.startAISpeechCooldown(); else this.log("Cooldown already active on server audio error.");
         };
-        this.currentServerAudio.play().catch(e => {
+
+        audio.play().catch(e => {
+          if (audio !== this.currentServerAudio && this.currentServerAudio !== null) {
+            this.log("Server audio play().catch: Stale event or already handled by stopSpeaking. Ignoring.");
+            return;
+          }
           this.error("Audio play() promise rejected for server audio", e);
-          this.currentServerAudio = null;
-          this.startAISpeechCooldown(); // Still trigger cooldown
+          if (this.currentServerAudio === audio) {
+            this.currentServerAudio = null;
+          }
+          if (!this.isAISpeechCoolDown) this.startAISpeechCooldown(); else this.log("Cooldown already active on server audio play catch.");
         });
       }
 
       speakTextBrowserFallback(text, lang) {
         if (this.currentServerAudio && !this.currentServerAudio.paused) {
              this.log("Stopping server audio to play browser TTS.");
-             this.currentServerAudio.pause(); this.currentServerAudio = null; 
+             this.currentServerAudio.pause();
+             this.currentServerAudio.onplay = null;
+             this.currentServerAudio.onended = null;
+             this.currentServerAudio.onerror = null;
+             this.currentServerAudio.src = "";
+             this.currentServerAudio = null;
         }
-        if (this.synthesis.speaking) {
-            this.log("Cancelling previous browser TTS.");
+        if (this.synthesis && this.synthesis.speaking) {
+            this.log("Cancelling previous browser TTS before speaking new one.");
+            if (this.currentUtterance) {
+                this.currentUtterance.onstart = null;
+                this.currentUtterance.onend = null;
+                this.currentUtterance.onerror = null;
+            }
             this.synthesis.cancel();
+            this.currentUtterance = null;
         }
 
-        this.currentUtterance = new SpeechSynthesisUtterance(text);
-        const voices = this.synthesis.getVoices(); 
+        const utterance = new SpeechSynthesisUtterance(text);
+        this.currentUtterance = utterance;
+
+        const voices = this.synthesis.getVoices();
         let selectedVoice = null;
-        
-        if (lang && voices && voices.length > 0) { // Ensure voices is not null
-            this.currentUtterance.lang = lang;
+        if (lang && voices && voices.length > 0) {
+            utterance.lang = lang;
             const primaryLang = lang.split('-')[0].toLowerCase();
-            // Prioritize default voices for the language
             selectedVoice = voices.find(v => v.lang.toLowerCase() === lang.toLowerCase() && v.default) ||
                             voices.find(v => v.lang.toLowerCase() === lang.toLowerCase()) ||
                             voices.find(v => v.lang.toLowerCase().startsWith(primaryLang + "-") && v.default) ||
@@ -956,65 +1094,95 @@
                             voices.find(v => v.lang.toLowerCase() === primaryLang && v.default) ||
                             voices.find(v => v.lang.toLowerCase() === primaryLang);
         }
-        
         if (selectedVoice) {
-            this.currentUtterance.voice = selectedVoice;
+            utterance.voice = selectedVoice;
             this.log(`Using browser TTS voice: ${selectedVoice.name} (${selectedVoice.lang}) for lang: ${lang}`);
         } else {
             const preferredVoiceIndex = this.voiceSelect.value;
-            if (preferredVoiceIndex && voices && voices[preferredVoiceIndex]) { // Check voices again
-                this.currentUtterance.voice = voices[preferredVoiceIndex];
-                this.log(`Using preferred fallback TTS voice from dropdown: ${this.currentUtterance.voice.name}`);
-            } else { 
-                this.log(`No specific browser TTS voice for "${lang}". Using browser default.`); 
+            if (preferredVoiceIndex && voices && voices[preferredVoiceIndex]) {
+                utterance.voice = voices[preferredVoiceIndex];
+                this.log(`Using preferred fallback TTS voice from dropdown: ${utterance.voice.name}`);
+            } else {
+                this.log(`No specific browser TTS voice for "${lang}". Using browser default.`);
             }
         }
-        
-        this.currentUtterance.rate = parseFloat(this.speedRange.value);
-        this.currentUtterance.pitch = parseFloat(this.pitchRange.value);
+        utterance.rate = parseFloat(this.speedRange.value);
+        utterance.pitch = parseFloat(this.pitchRange.value);
 
-        this.currentUtterance.onstart = () => {
+        utterance.onstart = () => {
+          if (utterance !== this.currentUtterance) {
+            this.log("Browser TTS onstart: Stale event. Ignoring.");
+            return;
+          }
           this.log("👄 AI Browser TTS Started...");
           this.updateStatus('speaking', 'AI Speaking...', 'AI is responding');
           this.voiceBtn.classList.add('ai-speaking');
           this.voiceBtn.classList.remove('vad-listening-mode', 'user-speaking', 'ai-processing', 'status-idle');
         };
-        this.currentUtterance.onend = () => {
-          this.log("👄 AI Browser TTS Finished.");
-          this.currentUtterance = null;
-          this.startAISpeechCooldown();
+
+        utterance.onend = () => {
+          if ((utterance !== this.currentUtterance && this.currentUtterance !== null) || !this.synthesis.speaking && this.currentUtterance === null) {
+            this.log("Browser TTS onend: Stale event or already handled by stopSpeaking/cancel. Ignoring.");
+            return;
+          }
+          this.log("👄 AI Browser TTS Finished (onend).");
+          if (this.currentUtterance === utterance) {
+              this.currentUtterance = null;
+          }
+          if (!this.isAISpeechCoolDown) this.startAISpeechCooldown(); else this.log("Cooldown already active on browser TTS end.");
         };
-        this.currentUtterance.onerror = (e) => {
-          this.error(`Browser TTS error: ${e.error}`, e);
-          this.currentUtterance = null;
-          this.startAISpeechCooldown();
+
+        utterance.onerror = (e) => {
+          if ((utterance !== this.currentUtterance && this.currentUtterance !== null) || !this.synthesis.speaking && this.currentUtterance === null) {
+            this.log("Browser TTS onerror: Stale event or already handled by stopSpeaking/cancel. Ignoring.");
+            return;
+          }
+          this.error(`Browser TTS error (onerror): ${e.error}`, e);
+          if (this.currentUtterance === utterance) {
+              this.currentUtterance = null;
+          }
+          if (!this.isAISpeechCoolDown) this.startAISpeechCooldown(); else this.log("Cooldown already active on browser TTS error.");
         };
+
         try {
-            this.synthesis.speak(this.currentUtterance);
+            this.synthesis.speak(utterance);
         } catch (e) {
             this.error("Error calling speechSynthesis.speak", e);
-            this.startAISpeechCooldown(); // Ensure state resets
+            if (this.currentUtterance === utterance) {
+                this.currentUtterance = null;
+            }
+            if (!this.isAISpeechCoolDown) this.startAISpeechCooldown();
         }
       }
 
       startAISpeechCooldown() {
+        if (this.isAISpeechCoolDown) {
+            this.log("Cooldown already in progress.");
+            return;
+        }
         this.isAISpeechCoolDown = true;
-        this.voiceBtn.classList.remove('ai-speaking'); // Remove speaking class immediately
+        this.voiceBtn.classList.remove('ai-speaking');
         this.log(`AI speech cool-down started (${this.AI_SPEECH_COOLDOWN_MS}ms).`);
-        setTimeout(() => {
+
+        if (this.cooldownTimeoutId) clearTimeout(this.cooldownTimeoutId);
+
+        this.cooldownTimeoutId = setTimeout(() => {
           this.isAISpeechCoolDown = false;
+          this.cooldownTimeoutId = null;
           this.log("AI speech cool-down finished.");
           this.resetToListeningState();
         }, this.AI_SPEECH_COOLDOWN_MS);
       }
+      // --- END OF FOCUSED CHANGES FOR STOP SPEAKING ---
+
 
       resetToListeningState() {
           // Only reset to listening if VAD is enabled and no other conflicting states are active
-          if (this.vadEnabled && 
-              !this.isProcessingAI && 
+          if (this.vadEnabled &&
+              !this.isProcessingAI &&
               !this.userIsSpeakingVAD &&
               (!this.currentServerAudio || this.currentServerAudio.paused) && // Server audio not playing
-              !this.synthesis.speaking && // Browser TTS not speaking
+              (!this.synthesis || !this.synthesis.speaking) && // Browser TTS not speaking
               !this.isAISpeechCoolDown) { // Not in cooldown
             this.updateStatus('vad-active', 'Listening...', 'Speak when ready.');
             this.voiceBtn.classList.add('vad-listening-mode');
@@ -1047,35 +1215,10 @@
         this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
       }
 
-      stopSpeaking() {
-        let wasSpeaking = false;
-        if (this.currentServerAudio && !this.currentServerAudio.paused) {
-          this.log("Manually stopping server audio playback.");
-          this.currentServerAudio.pause(); // This will trigger its 'onended' or 'onerror' which starts cooldown
-          this.currentServerAudio.src = ""; // Release resource
-          this.currentServerAudio = null;
-          wasSpeaking = true;
-        }
-        if (this.synthesis.speaking) {
-          this.log("Manually stopping browser AI speech.");
-          this.synthesis.cancel(); // This will trigger its 'onend' or 'onerror' which starts cooldown
-          wasSpeaking = true;
-        }
-        
-        // If cooldown wasn't triggered by an onended/onerror event, start it.
-        // Also, ensure UI is updated immediately.
-        this.voiceBtn.classList.remove('ai-speaking');
-        if (wasSpeaking && !this.isAISpeechCoolDown) {
-             this.startAISpeechCooldown();
-        } else if (!wasSpeaking) {
-            this.resetToListeningState(); // If nothing was speaking, just reset
-        }
-      }
-
       bindEvents() {
         this.voiceBtn.addEventListener('click', () => this.toggleVAD());
         this.clearChat.addEventListener('click', () => { this.log("Clearing chat."); this.socket.emit('clear_conversation'); });
-        this.stopSpeaking.addEventListener('click', () => this.stopSpeaking());
+        this.stopSpeaking.addEventListener('click', () => this.stopSpeaking()); // This calls the modified stopSpeaking
         this.testGemini.addEventListener('click', () => this.testGeminiAPI());
         this.speedRange.addEventListener('input', (e) => { this.speedValue.textContent = e.target.value; });
         this.pitchRange.addEventListener('input', (e) => { this.pitchValue.textContent = e.target.value; });
@@ -1089,18 +1232,21 @@
         this.updateStatus('processing', 'Testing API...', 'Sending test request.');
         this.voiceBtn.classList.add('ai-processing');
 
-        fetch('/test-gemini')
+        const testLang = this.inputLanguageSelect ? this.inputLanguageSelect.value : 'en';
+        this.log(`Test Gemini using language context: ${testLang}`);
+
+        fetch(`/test-gemini?lang=${testLang}`)
           .then(response => {
             if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}, message: ${response.statusText}`); }
             return response.json();
           })
           .then(data => {
-            this.isProcessingAI = false; // Reset flag after fetch
+            this.isProcessingAI = false;
             this.voiceBtn.classList.remove('ai-processing');
 
             if (data.success && data.response_text) {
               this.log("Gemini API Test Successful: " + data.response_text);
-              this.addMessage('Gemini API Test (Manual)', 'user');
+              this.addMessage(`Gemini API Test (Manual - Lang: ${data.response_language || testLang})`, 'user');
               this.addMessage(data.response_text, 'assistant');
               if (data.response_audio_base64) {
                 this.playServerAudio(data.response_audio_base64);
